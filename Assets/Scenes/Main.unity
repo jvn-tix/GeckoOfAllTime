@@ -711,6 +711,62 @@ Transform:
   m_Children: []
   m_Father: {fileID: 758430495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -44.324}
+--- !u!1 &1889860101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1889860103}
+  - component: {fileID: 1889860102}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1889860102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889860101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9093dfef48e43554398202c906b4242c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  enemyTypes:
+  - enemyName: Ant
+    enemyPrefab: {fileID: 6975376387698333368, guid: ccee4bacc22f5884c9a15ddc4ca3d57d, type: 3}
+    spawnWeight: 10
+  - enemyName: Bee
+    enemyPrefab: {fileID: 732550917126448614, guid: f4228cf778e0a9941945234f098d8804, type: 3}
+    spawnWeight: 11
+  - enemyName: Dragonfly
+    enemyPrefab: {fileID: 4839827384199338358, guid: aaa578fffa7106948b5cded2c054f955, type: 3}
+    spawnWeight: 12
+  spawnInterval: 1.5
+  spawnDistance: 12
+--- !u!4 &1889860103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889860101}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.49779, y: 0.8661, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1902717775
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,9 +781,10 @@ GameObject:
   - component: {fileID: 1902717779}
   - component: {fileID: 1902717780}
   - component: {fileID: 1902717781}
+  - component: {fileID: 1902717782}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -987,6 +1044,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1902717782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902717775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c75a0e09207c9324090f7c77d2e95bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  maxHealth: 20
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -996,3 +1066,4 @@ SceneRoots:
   - {fileID: 1902717778}
   - {fileID: 1358181934}
   - {fileID: 215878563}
+  - {fileID: 1889860103}

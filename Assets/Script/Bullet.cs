@@ -18,20 +18,20 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, lifeTime);
     }
 
-    //void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    // Cek jika menabrak musuh (pastikan GameObject musuh diberi Tag "Enemy")
-    //    if (collision.CompareTag("Enemy"))
-    //    {
-    //        // Panggil fungsi TakeDamage di script musuh (jika ada)
-    //        EnemyHealth enemy = collision.GetComponent<EnemyHealth>();
-    //        if (enemy != null)
-    //        {
-    //            enemy.TakeDamage(damage);
-    //        }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Cek jika menabrak musuh (pastikan GameObject musuh diberi Tag "Enemy")
+        if (collision.CompareTag("Enemy"))
+        {
+            // Panggil fungsi TakeDamage di script musuh (jika ada)
+            Health enemy = collision.GetComponent<Health>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
 
-    //        // Hancurkan peluru saat kena musuh
-    //        Destroy(gameObject);
-    //    }
-    //}
+            // Hancurkan peluru saat kena musuh
+            Destroy(gameObject);
+        }
+    }
 }
