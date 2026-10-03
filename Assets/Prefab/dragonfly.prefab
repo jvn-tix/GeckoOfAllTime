@@ -132,6 +132,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 20
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitColorDuration: 0.2
+  healthBar: {fileID: 0}
+  expOrbPrefab: {fileID: 4065178976242850119, guid: 8491a6119656669488c9c125ab0043c5, type: 3}
 --- !u!114 &5842137728962256139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   moveSpeed: 2.5
+  rotationOffset: -90
 --- !u!114 &6355364825696661808
 MonoBehaviour:
   m_ObjectHideFlags: 0

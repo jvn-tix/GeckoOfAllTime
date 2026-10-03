@@ -13,12 +13,14 @@ public class Health : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
 
-    [Header("UI Reference (Opsional - Cukup diisi untuk Player)")]
+    [Header("UI Reference (Only For Player)")]
     [SerializeField] private PlayerHealthBar healthBar;
+
+    [Header("Drop Settings (Only For Enemy)")]
+    [SerializeField] private GameObject expOrbPrefab;
 
     void Awake()
     {
-        // 1. Inisialisasi darah di Awake() agar nilainya LANGSUNG terisi sebelum frame pertama berjalan
         currentHealth = maxHealth;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -78,13 +80,14 @@ public class Health : MonoBehaviour
         if (CompareTag("Player"))
         {
             Debug.Log("Player Mati! Game Over.");
-            // Untuk Player, JANGAN Destroy(gameObject) langsung agar game tidak error, 
-            // melainkan matikan gerakan/tampilkan layar Game Over.
             gameObject.SetActive(false);
         }
         else
         {
-            // Jika Enemy, hancurkan objeknya
+            if(expOrbPrefab != null)
+            {
+                Instantiate(expOrbPrefab, transform.position, Quaternion.identity);
+            }
             Destroy(gameObject);
         }
     }
