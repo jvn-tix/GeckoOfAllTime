@@ -10,7 +10,13 @@ public class TurretController : MonoBehaviour
     [Header("Shooting Config")]
     public GameObject bulletPrefab;
     public Transform firePoint;
-    public float fireRate = 0.5f;
+
+    [Header("Upgrade Stats")]
+    [SerializeField] private float bulletDamage = 10f;
+    [SerializeField] private float fireRate = 0.5f; // Cooldown/interval antar tembakan (detik)
+    [SerializeField] private int projectileCount = 1;
+    [SerializeField] private float spreadAngle = 15f; // Sudut sebaran peluru jika projectile > 1
+
     private float nextFireTime;
 
     void Start()
@@ -22,13 +28,8 @@ public class TurretController : MonoBehaviour
     {
         if (Mouse.current != null)
         {
-            // 1. Ambil posisi layar 2D dari mouse
             Vector3 screenMousePos = Mouse.current.position.ReadValue();
-
-            // 2. Beri nilai Z berdasarkan jarak kamera ke posisi Turret di world space
             screenMousePos.z = Mathf.Abs(mainCam.transform.position.z - transform.position.z);
-
-            // 3. Konversi ke World Point yang presisi
             mousePos = mainCam.ScreenToWorldPoint(screenMousePos);
         }
 
@@ -42,19 +43,68 @@ public class TurretController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Hitung arah dari Turret ke Mouse
         Vector2 lookDir = mousePos - (Vector2)transform.position;
-
-        // Hitung sudut rotasi
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 45f;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0,angle - 45f);
     }
 
     void Shoot()
     {
-        if (bulletPrefab != null && firePoint != null)
+        if (bulletPrefab == null || firePoint == null) return;
+
+        Vector2 lookDir = mousePos - (Vector2)firePoint.position;
+
+        // Karena peluru menghadap ke ATAS (+Y), kita butuh -90f agar arah atas peluru menuju ke Mouse
+        float targetAngle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+
+        if (projectileCount == 1)
         {
-            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            InstantiateBullet(targetAngle);
         }
+        // 2. Jika peluru > 1, sebarkan secara simetris di tengah
+        else
+        {
+            float totalSpread = spreadAngle * (projectileCount - 1);
+            float startAngle = targetAngle - (totalSpread / 2f);
+
+            for (int i = 0; i < projectileCount; i++)
+            {
+                float currentAngle = startAngle + (i * spreadAngle);
+                InstantiateBullet(currentAngle);
+            }
+        }
+    }
+
+    private void InstantiateBullet(float zRotation)
+    {
+        Quaternion bulletRotation = Quaternion.Euler(0, 0, zRotation);
+        GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, bulletRotation);
+
+        Bullet bulletScript = bulletObj.GetComponent<Bullet>();
+        if (bulletScript != null)
+        {
+            bulletScript.SetDamage(bulletDamage);
+        }
+    }
+
+    // --- FUNCTION CALLS DARI LEVEL UP MANAGER ---
+
+    public void AddDamage(float amount)
+    {
+        bulletDamage += amount;
+        Debug.Log($"Damage bertambah! Damage saat ini: {bulletDamage}");
+    }
+
+    public void AddFireRate(float amount)
+    {
+        // Pengurangan cooldown interval (semakin kecil interval, semakin cepat menembak)
+        fireRate = Mathf.Max(0.05f, fireRate - amount);
+        Debug.Log($"Cooldown tembak berkurang! Cooldown saat ini: {fireRate}s");
+    }
+
+    public void AddProjectileCount(int amount)
+    {
+        projectileCount += amount;
+        Debug.Log($"Jumlah peluru bertambah! Peluru saat ini: {projectileCount}");
     }
 }

@@ -60,6 +60,24 @@ public class Health : MonoBehaviour
         }
     }
 
+    // --- FUNCTION DIPANGGIL DARI LEVEL UP MANAGER ---
+    public void AddMaxHealth(float amount)
+    {
+        int additionalHP = Mathf.RoundToInt(amount);
+
+        // 1. Tambah Max Health
+        maxHealth += additionalHP;
+
+        // 2. Isi HP player sejumlah penambahan max HP tersebut
+        currentHealth += additionalHP;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        // 3. Refresh UI Health Bar
+        UpdateUI();
+
+        Debug.Log($"{gameObject.name} Max HP bertambah {additionalHP}! Total Max HP: {maxHealth}");
+    }
+
     private IEnumerator HitFlashRoutine()
     {
         spriteRenderer.color = hitColor;
@@ -84,7 +102,7 @@ public class Health : MonoBehaviour
         }
         else
         {
-            if(expOrbPrefab != null)
+            if (expOrbPrefab != null)
             {
                 Instantiate(expOrbPrefab, transform.position, Quaternion.identity);
             }

@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4656c0c9cd4ae4346aa1ba88a02bdea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
-  damageAmount: 10
+  damageAmount: 2
 --- !u!114 &-4968599821008427665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75a0e09207c9324090f7c77d2e95bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 20
+  maxHealth: 10
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   hitColorDuration: 0.2
   healthBar: {fileID: 0}

@@ -13,9 +13,16 @@ public class Bullet : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
+        // Menggunakan linearVelocity untuk Unity versi terbaru / 2D Physics
         rb.linearVelocity = transform.up * speed;
 
         Destroy(gameObject, lifeTime);
+    }
+
+    // --- FUNCTION DIPANGGIL DARI TURRETCONTROLLER ---
+    public void SetDamage(float newDamage)
+    {
+        damage = Mathf.RoundToInt(newDamage);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -23,7 +30,7 @@ public class Bullet : MonoBehaviour
         // Cek jika menabrak musuh (pastikan GameObject musuh diberi Tag "Enemy")
         if (collision.CompareTag("Enemy"))
         {
-            // Panggil fungsi TakeDamage di script musuh (jika ada)
+            // Panggil fungsi TakeDamage di script musuh
             Health enemy = collision.GetComponent<Health>();
             if (enemy != null)
             {

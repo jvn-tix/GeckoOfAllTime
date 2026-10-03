@@ -15,6 +15,8 @@ public class PlayerExp : MonoBehaviour
     [Header("UI Reference")]
     [SerializeField] private ExpBarUI expBarUI;
 
+    [SerializeField] private LevelUpManager levelUpManager;
+
     void Start()
     {
         UpdateUI();
@@ -64,7 +66,10 @@ public class PlayerExp : MonoBehaviour
 
         Debug.Log("LEVEL UP! Sekarang Level: " + currentLevel);
 
-        // Nanti bisa dipanggil Pop-up Upgrade Weapon/Skill di sini!
+        if(levelUpManager != null)
+        {
+            levelUpManager.TriggerLevelUp();
+        }
     }
 
     private void UpdateUI()
