@@ -78,6 +78,12 @@ public class Health : MonoBehaviour
         Debug.Log($"{gameObject.name} Max HP bertambah {additionalHP}! Total Max HP: {maxHealth}");
     }
 
+    public void Heal(float amount)
+    {
+        int healAmount = Mathf.RoundToInt(amount);
+        currentHealth = Mathf.Min(currentHealth + healAmount, maxHealth);
+        UpdateUI();
+    }
     private IEnumerator HitFlashRoutine()
     {
         spriteRenderer.color = hitColor;
