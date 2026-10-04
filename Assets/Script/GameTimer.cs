@@ -10,9 +10,6 @@ public class GameTimer : MonoBehaviour
     [Header("UI Reference")]
     [SerializeField] private TextMeshProUGUI timerText;
 
-    [Header("Game Over / Win UI (Optional)")]
-    [SerializeField] private GameObject victoryPanel; // Panel yang muncul saat menang (opsional)
-
     void Start()
     {
         // Mulai timer saat game berjalan
@@ -69,9 +66,9 @@ public class GameTimer : MonoBehaviour
         Time.timeScale = 0f;
 
         // Tampilkan Win Panel jika ada
-        if (victoryPanel != null)
+        if (GameOverManager.Instance != null)
         {
-            victoryPanel.SetActive(true);
+            GameOverManager.Instance.TriggerVictory();
         }
     }
 }

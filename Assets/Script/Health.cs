@@ -99,6 +99,10 @@ public class Health : MonoBehaviour
         {
             Debug.Log("Player Mati! Game Over.");
             gameObject.SetActive(false);
+            if(GameOverManager.Instance != null)
+            {
+                GameOverManager.Instance.TriggerGameOver();
+            }
         }
         else
         {
