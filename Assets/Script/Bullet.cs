@@ -6,6 +6,7 @@ public class Bullet : MonoBehaviour
     public float speed = 15f;
     public int damage = 10;
     public float lifeTime = 3f; // Peluru hancur otomatis setelah 3 detik jika tidak kena apa-apa
+    public float knockbackForce = 6f;
 
     private Rigidbody2D rb;
 
@@ -35,6 +36,12 @@ public class Bullet : MonoBehaviour
             if (enemy != null)
             {
                 enemy.TakeDamage(damage);
+            }
+
+            EnemyMovement movement = collision.GetComponent<EnemyMovement>();
+            if (movement != null)
+            {
+                movement.ApplyKnockback(transform.up, knockbackForce);
             }
 
             // Hancurkan peluru saat kena musuh

@@ -13,11 +13,24 @@ public class Health : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
 
+    [Header("Flash Settings (Only if material has _FlashAmount)")]
+    [SerializeField, Range(0f, 1f)] private float flashAmount = 0.5f;
+    private MaterialPropertyBlock propertyBlock;
+    private bool useFlashMaterial;
+    private static readonly int FlashAmountID = Shader.PropertyToID("_FlashAmount");
+
     [Header("UI Reference (Only For Player)")]
     [SerializeField] private PlayerHealthBar healthBar;
 
     [Header("Drop Settings (Only For Enemy)")]
     [SerializeField] private GameObject expOrbPrefab;
+
+    [Header("Audio (Only For Enemy)")]
+    [SerializeField] private AudioClip deathSfx;
+    [SerializeField, Range(0f, 1f)] private float deathSfxVolume = 1f;
+
+    [Header("Damage Popup (Only For Enemy)")]
+    [SerializeField] private DamagePopup damagePopupPrefab;
 
     void Awake()
     {
@@ -27,6 +40,11 @@ public class Health : MonoBehaviour
         if (spriteRenderer != null)
         {
             originalColor = spriteRenderer.color;
+
+            useFlashMaterial = spriteRenderer.sharedMaterial != null
+                               && spriteRenderer.sharedMaterial.HasProperty(FlashAmountID);
+
+            if (useFlashMaterial) propertyBlock = new MaterialPropertyBlock();
         }
     }
 
@@ -48,6 +66,13 @@ public class Health : MonoBehaviour
         Debug.Log(gameObject.name + " HP Sekarang: " + currentHealth);
 
         UpdateUI();
+
+        if (damagePopupPrefab != null)
+        {
+            Vector3 spawnPos = transform.position + new Vector3(Random.Range(-0.2f, 0.2f), 0.5f, 0f);
+            DamagePopup popup = Instantiate(damagePopupPrefab, spawnPos, Quaternion.identity);
+            popup.Setup(damage);
+        }
 
         if (spriteRenderer != null)
         {
@@ -75,7 +100,7 @@ public class Health : MonoBehaviour
         // 3. Refresh UI Health Bar
         UpdateUI();
 
-        Debug.Log($"{gameObject.name} Max HP bertambah {additionalHP}! Total Max HP: {maxHealth}");
+        //Debug.Log($"{gameObject.name} Max HP bertambah {additionalHP}! Total Max HP: {maxHealth}");
     }
 
     public void Heal(float amount)
@@ -86,9 +111,20 @@ public class Health : MonoBehaviour
     }
     private IEnumerator HitFlashRoutine()
     {
-        spriteRenderer.color = hitColor;
+        if (useFlashMaterial) SetFlash(flashAmount);
+        else spriteRenderer.color = hitColor;
+
         yield return new WaitForSeconds(hitColorDuration);
-        spriteRenderer.color = originalColor;
+
+        if (useFlashMaterial) SetFlash(0f);
+        else spriteRenderer.color = originalColor;
+    }
+
+    private void SetFlash(float amount)
+    {
+        spriteRenderer.GetPropertyBlock(propertyBlock);
+        propertyBlock.SetFloat(FlashAmountID, amount);
+        spriteRenderer.SetPropertyBlock(propertyBlock);
     }
 
     private void UpdateUI()
@@ -103,7 +139,7 @@ public class Health : MonoBehaviour
     {
         if (CompareTag("Player"))
         {
-            Debug.Log("Player Mati! Game Over.");
+            //Debug.Log("Player Mati! Game Over.");
             gameObject.SetActive(false);
             if(GameOverManager.Instance != null)
             {
@@ -112,6 +148,7 @@ public class Health : MonoBehaviour
         }
         else
         {
+            if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(deathSfx, deathSfxVolume);
             if (expOrbPrefab != null)
             {
                 Instantiate(expOrbPrefab, transform.position, Quaternion.identity);

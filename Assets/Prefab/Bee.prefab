@@ -64,7 +64,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 6b8b489f9527bae4c8d3c8f62ee30b93, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -160,6 +160,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   moveSpeed: 2.5
   rotationOffset: -90
+  knockbackResistance: 0
+  knockbackDuration: 0.12
 --- !u!114 &4491833423393436513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,10 +175,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 10
-  hitColor: {r: 1, g: 0, b: 0, a: 1}
-  hitColorDuration: 0.2
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  hitColorDuration: 0.1
+  flashAmount: 0.5
   healthBar: {fileID: 0}
   expOrbPrefab: {fileID: 4065178976242850119, guid: 8491a6119656669488c9c125ab0043c5, type: 3}
+  deathSfx: {fileID: 8300000, guid: b4c6a119bce925340ac4b35d29301123, type: 3}
+  deathSfxVolume: 0.5
+  damagePopupPrefab: {fileID: 9197689860451478448, guid: a110bdd1fff1b5849a38dccd209c759f, type: 3}
 --- !u!114 &3146114667839447910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
   damageAmount: 2
+  damageInterval: 1
 --- !u!70 &8254364226975547435
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

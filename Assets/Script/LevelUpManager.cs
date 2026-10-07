@@ -15,6 +15,9 @@ public class LevelUpManager : MonoBehaviour
     [SerializeField] private Health playerHealth;
     [SerializeField] private TurretController playerAttack; // Sesuaikan dengan nama script attack kamu
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip levelUpSfx;
+
     private List<PowerUpData> currentOfferedPowerUps = new List<PowerUpData>();
 
     public void TriggerLevelUp()
@@ -25,6 +28,7 @@ public class LevelUpManager : MonoBehaviour
     private void ShowUpgradeScreen()
     {
         Time.timeScale = 0f; // Pause Game
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(levelUpSfx);
         levelUpPanel.SetActive(true);
 
         GenerateOptions();
@@ -55,6 +59,7 @@ public class LevelUpManager : MonoBehaviour
 
     public void SelectPowerUp(PowerUpData selectedPowerUp)
     {
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
         // Tambahkan status ke Player
         ApplyPowerUp(selectedPowerUp);
 

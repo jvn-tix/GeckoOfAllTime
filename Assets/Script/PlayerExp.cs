@@ -64,7 +64,7 @@ public class PlayerExp : MonoBehaviour
         currentLevel++;
         expToNextLevel = Mathf.RoundToInt(expToNextLevel * expGrowthFactor);
 
-        Debug.Log("LEVEL UP! Sekarang Level: " + currentLevel);
+        //Debug.Log("LEVEL UP! Sekarang Level: " + currentLevel);
 
         if(levelUpManager != null)
         {

@@ -14,6 +14,7 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
 
     private bool isPaused = false;
+    private float timeScaleBeforePause = 1f;
 
     private void Awake()
     {
@@ -58,21 +59,22 @@ public class PauseManager : MonoBehaviour
         // Jangan izinkan pause jika game sedang freeze karena Level Up / Game Over / Victory
         if (Time.timeScale == 0f && !isPaused) return;
 
-        isPaused = !isPaused;
-
         if (isPaused)
         {
-            PauseGame();
+            ResumeGame();
         }
         else
         {
-            ResumeGame();
+            PauseGame();
         }
     }
 
     public void PauseGame()
     {
+        if (isPaused) return;
+
         isPaused = true;
+        timeScaleBeforePause = Time.timeScale;
         Time.timeScale = 0f; // Freeze pergerakan & timer game
         if (pausePanel != null)
         {
@@ -82,8 +84,10 @@ public class PauseManager : MonoBehaviour
 
     public void ResumeGame()
     {
+        if (!isPaused) return;
+
         isPaused = false;
-        Time.timeScale = 1f; // Kembalikan waktu normal
+        Time.timeScale = timeScaleBeforePause; // Kembalikan waktu normal
         if (pausePanel != null)
         {
             pausePanel.SetActive(false);

@@ -11,6 +11,10 @@ public class TurretController : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform firePoint;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip shootSfx;
+    [SerializeField, Range(0f, 1f)] private float shootSfxVolume = 0.4f;
+
     [Header("Upgrade Stats")]
     [SerializeField] private float bulletDamage = 10f;
     [SerializeField] private float fireRate = 0.5f; // Cooldown/interval antar tembakan (detik)
@@ -51,7 +55,8 @@ public class TurretController : MonoBehaviour
     void Shoot()
     {
         if (bulletPrefab == null || firePoint == null) return;
-
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(shootSfx, shootSfxVolume);
+        
         Vector2 lookDir = mousePos - (Vector2)firePoint.position;
 
         // Karena peluru menghadap ke ATAS (+Y), kita butuh -90f agar arah atas peluru menuju ke Mouse
@@ -92,19 +97,19 @@ public class TurretController : MonoBehaviour
     public void AddDamage(float amount)
     {
         bulletDamage += amount;
-        Debug.Log($"Damage bertambah! Damage saat ini: {bulletDamage}");
+        //Debug.Log($"Damage bertambah! Damage saat ini: {bulletDamage}");
     }
 
     public void AddFireRate(float amount)
     {
         // Pengurangan cooldown interval (semakin kecil interval, semakin cepat menembak)
         fireRate = Mathf.Max(0.05f, fireRate - amount);
-        Debug.Log($"Cooldown tembak berkurang! Cooldown saat ini: {fireRate}s");
+        //Debug.Log($"Cooldown tembak berkurang! Cooldown saat ini: {fireRate}s");
     }
 
     public void AddProjectileCount(int amount)
     {
         projectileCount += amount;
-        Debug.Log($"Jumlah peluru bertambah! Peluru saat ini: {projectileCount}");
+        //Debug.Log($"Jumlah peluru bertambah! Peluru saat ini: {projectileCount}");
     }
 }

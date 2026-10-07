@@ -6,6 +6,9 @@ public class HealthOrb : MonoBehaviour
     [SerializeField] private float healAmount = 25f; // Jumlah HP yang dipulihkan
     [SerializeField] private float lifeTime = 15f;   // Hancur otomatis jika tidak diambil dalam 15 detik
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip collectSfx;
+
     private void Start()
     {
         // Hancurkan orb jika tidak diambil dalam batas waktu lifeTime
@@ -21,6 +24,7 @@ public class HealthOrb : MonoBehaviour
             if (playerHealth != null)
             {
                 playerHealth.Heal(healAmount);
+                if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(collectSfx);
                 Destroy(gameObject);
             }
         }

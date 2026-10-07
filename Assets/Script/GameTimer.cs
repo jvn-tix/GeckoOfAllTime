@@ -4,8 +4,9 @@ using TMPro; // Diperlukan untuk TextMeshPro
 public class GameTimer : MonoBehaviour
 {
     [Header("Timer Settings")]
-    [SerializeField] private float timeRemaining = 600f; // 10 menit = 600 detik
+    [SerializeField] private float timeRemaining = 300f; // 5 menit = 300 detik
     private bool isTimerRunning = false;
+    public float TimeRemaining => timeRemaining;
 
     [Header("UI Reference")]
     [SerializeField] private TextMeshProUGUI timerText;
@@ -60,7 +61,7 @@ public class GameTimer : MonoBehaviour
 
     private void OnTimeExpired()
     {
-        Debug.Log("Waktu Habis! Player Menang!");
+        //Debug.Log("Waktu Habis! Player Menang!");
 
         // Hentikan jalannya game
         Time.timeScale = 0f;

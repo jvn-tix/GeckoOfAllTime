@@ -6,6 +6,9 @@ public class ExpOrb : MonoBehaviour
     [SerializeField] private int expAmount = 10;
     [SerializeField] private float moveSpeed = 8f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip collectSfx;
+
     private Transform playerTransform;
     private bool isAttracted = false;
 
@@ -32,14 +35,14 @@ public class ExpOrb : MonoBehaviour
     // Dipanggil oleh PlayerExp ketika Orb masuk radius pickup
     public void StartAttracting(Transform target)
     {
-        Debug.Log("Orb mendeteksi Player! Mulai bergerak.");
+        //Debug.Log("Orb mendeteksi Player! Mulai bergerak.");
         playerTransform = target;
         isAttracted = true;
     }
 
     private void CollectOrb()
     {
-        Debug.Log("Orb sampai di Player, mencoba memberikan EXP...");
+        //Debug.Log("Orb sampai di Player, mencoba memberikan EXP...");
         if (playerTransform != null)
         {
             // Cari PlayerExp di objek tersebut atau di parent-nya
@@ -54,7 +57,7 @@ public class ExpOrb : MonoBehaviour
                 playerExp.AddExperience(expAmount);
             }
         }
-
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(collectSfx);
         Destroy(gameObject);
     }
 }

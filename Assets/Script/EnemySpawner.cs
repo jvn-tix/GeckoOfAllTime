@@ -20,6 +20,12 @@ public class EnemySpawner : MonoBehaviour
     private Transform playerTransform;
     private float nextSpawnTime;
 
+    [Header("Endgame Settings")]
+    [SerializeField] private GameTimer gameTimer;
+    [SerializeField] private float endgameDuration = 120f;
+    [SerializeField] private AnimationCurve endgameCurve = AnimationCurve.Linear(0f, 1f, 1f, 3f);
+    [SerializeField] private int maxEnemiesAlive = 150;
+
     void Start()
     {
         // Cari Player berdasarkan Tag
@@ -40,9 +46,23 @@ public class EnemySpawner : MonoBehaviour
 
         if (Time.time >= nextSpawnTime)
         {
-            SpawnRandomEnemy();
-            nextSpawnTime = Time.time + spawnInterval;
+            if (GameObject.FindGameObjectsWithTag("Enemy").Length < maxEnemiesAlive)
+            {
+                SpawnRandomEnemy();
+            }
+            nextSpawnTime = Time.time + spawnInterval / GetSpawnMultiplier();
         }
+    }
+
+    private float GetSpawnMultiplier()
+    {
+        if (gameTimer == null) return 1f;
+
+        float remaining = gameTimer.TimeRemaining;
+        if (remaining > endgameDuration) return 1f;
+
+        float t = 1f - Mathf.Clamp01(remaining / endgameDuration);
+        return Mathf.Max(0.1f, endgameCurve.Evaluate(t));
     }
 
     void SpawnRandomEnemy()

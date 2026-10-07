@@ -13,6 +13,10 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject gameOverPanel;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip victorySfx;
+    [SerializeField] private AudioClip gameOverSfx;
+
     private bool isGameFinished = false;
 
     private void Awake()
@@ -42,11 +46,13 @@ public class GameOverManager : MonoBehaviour
         isGameFinished = true;
 
         Time.timeScale = 0f; // Hentikan pergerakan game
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(victorySfx);
+        
         if (victoryPanel != null)
         {
             victoryPanel.SetActive(true);
         }
-        Debug.Log("Game Finished: VICTORY!");
+        //Debug.Log("Game Finished: VICTORY!");
     }
 
     public void TriggerGameOver()
@@ -55,11 +61,13 @@ public class GameOverManager : MonoBehaviour
         isGameFinished = true;
 
         Time.timeScale = 0f; // Hentikan pergerakan game
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(gameOverSfx);
+        
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
         }
-        Debug.Log("Game Finished: GAME OVER!");
+        //Debug.Log("Game Finished: GAME OVER!");
     }
 
     // --- FUNGSI UNTUK BUTTON UI ---
