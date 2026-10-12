@@ -14,8 +14,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private EnemyData[] enemyTypes;
 
     [Header("Spawn Settings")]
-    [SerializeField] private float spawnInterval = 1.5f; // Jeda waktu antar spawn (detik)
-    [SerializeField] private float spawnDistance = 12f; // Jarak spawn di luar kamera dari player
+    [SerializeField] private float spawnInterval = 1f; // Jeda waktu antar spawn (detik)
+    [SerializeField] private float spawnDistance = 20f; // Jarak spawn di luar kamera dari player
 
     private Transform playerTransform;
     private float nextSpawnTime;

@@ -84,7 +84,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -449205007
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6391584198531748257, guid: 23eaab196b6e8f14c95528abeb70bb79, type: 3}
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75a0e09207c9324090f7c77d2e95bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 10
+  maxHealth: 20
   hitColor: {r: 1, g: 1, b: 1, a: 1}
   hitColorDuration: 0.1
   flashAmount: 0.5
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 029c9da8ce61efc4880f212d22ee848b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  moveSpeed: 2.5
+  moveSpeed: 1.5
   rotationOffset: -90
   knockbackResistance: 0
   knockbackDuration: 0.12
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4656c0c9cd4ae4346aa1ba88a02bdea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
-  damageAmount: 2
+  damageAmount: 4
   damageInterval: 1
 --- !u!50 &9042607346662926820
 Rigidbody2D:

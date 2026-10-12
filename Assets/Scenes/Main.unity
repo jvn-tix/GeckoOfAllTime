@@ -1649,7 +1649,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000f1ac39e573f697980dfacdbd
+  m_ApplyToSortingLayers: 00000000f1ac39e573f697980dfacdbd8d3f7962
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -1962,7 +1962,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1734871437
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2323917800338813707, guid: a433422904828fd43a9d2873f8a54848, type: 3}
@@ -4877,15 +4877,15 @@ MonoBehaviour:
   enemyTypes:
   - enemyName: Ant
     enemyPrefab: {fileID: 6975376387698333368, guid: ccee4bacc22f5884c9a15ddc4ca3d57d, type: 3}
-    spawnWeight: 10
+    spawnWeight: 100
   - enemyName: Bee
     enemyPrefab: {fileID: 732550917126448614, guid: f4228cf778e0a9941945234f098d8804, type: 3}
-    spawnWeight: 11
+    spawnWeight: 100
   - enemyName: Dragonfly
     enemyPrefab: {fileID: 4839827384199338358, guid: aaa578fffa7106948b5cded2c054f955, type: 3}
-    spawnWeight: 12
-  spawnInterval: 1.5
-  spawnDistance: 12
+    spawnWeight: 60
+  spawnInterval: 1
+  spawnDistance: 20
   gameTimer: {fileID: 1852105070}
   endgameDuration: 120
   endgameCurve:
@@ -5011,7 +5011,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -449205007
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6092091056668352646, guid: 47ec65f0af5bbf34bb39eb61138c2b65, type: 3}
@@ -5244,7 +5244,7 @@ MonoBehaviour:
   expOrbPrefab: {fileID: 0}
   deathSfx: {fileID: 0}
   deathSfxVolume: 1
-  damagePopupPrefab: {fileID: 0}
+  damagePopupPrefab: {fileID: 9197689860451478448, guid: a110bdd1fff1b5849a38dccd209c759f, type: 3}
 --- !u!70 &1902717783
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
