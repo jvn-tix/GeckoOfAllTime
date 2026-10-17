@@ -32,9 +32,16 @@ public class Health : MonoBehaviour
     [Header("Damage Popup (Only For Enemy)")]
     [SerializeField] private DamagePopup damagePopupPrefab;
 
+    [SerializeField] private Animator animator;
+
     void Awake()
     {
         currentHealth = maxHealth;
+
+        if(animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
@@ -56,12 +63,18 @@ public class Health : MonoBehaviour
         }
 
         UpdateUI();
+
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        if(animator != null && currentHealth > 0)
+        {
+            animator.SetTrigger("Hit");
+        }
 
         Debug.Log(gameObject.name + " HP Sekarang: " + currentHealth);
 
@@ -137,6 +150,11 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
+        if(animator != null)
+        {
+            animator.SetTrigger("Die");
+        }
+
         if (CompareTag("Player"))
         {
             //Debug.Log("Player Mati! Game Over.");
@@ -148,12 +166,14 @@ public class Health : MonoBehaviour
         }
         else
         {
+            Collider2D coll = GetComponent<Collider2D>();
+            if(coll != null) coll.enabled = false;
             if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(deathSfx, deathSfxVolume);
             if (expOrbPrefab != null)
             {
                 Instantiate(expOrbPrefab, transform.position, Quaternion.identity);
             }
-            Destroy(gameObject);
+            Destroy(gameObject, 0.5f);
         }
     }
 

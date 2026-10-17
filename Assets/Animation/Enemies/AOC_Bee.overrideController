@@ -6,8 +6,12 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AOC_Ant 2
+  m_Name: AOC_Bee
   m_Controller: {fileID: 9100000, guid: 49fe21350c12fc646ac882cf426a7948, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: aff0a7783f1f60d4a860b102bcb7051c, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: ccb1b47955ce9604aa859123375307c4, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 17e5949c29414f34c88774f530069af9, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 63b429b1b6b67074fb7e1eb6b146df26, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: ca541bf908811004f93534dc17890154, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b95b47d42abda5345b77a2cebfb5f82a, type: 2}

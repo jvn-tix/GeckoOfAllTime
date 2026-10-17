@@ -1129,7 +1129,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3528,7 +3528,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 34
-    OrthographicSize: 10
+    OrthographicSize: 9
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -4883,7 +4883,7 @@ MonoBehaviour:
     spawnWeight: 100
   - enemyName: Dragonfly
     enemyPrefab: {fileID: 4839827384199338358, guid: aaa578fffa7106948b5cded2c054f955, type: 3}
-    spawnWeight: 60
+    spawnWeight: 100
   spawnInterval: 1
   spawnDistance: 20
   gameTimer: {fileID: 1852105070}
@@ -5245,6 +5245,7 @@ MonoBehaviour:
   deathSfx: {fileID: 0}
   deathSfxVolume: 1
   damagePopupPrefab: {fileID: 9197689860451478448, guid: a110bdd1fff1b5849a38dccd209c759f, type: 3}
+  animator: {fileID: 0}
 --- !u!70 &1902717783
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

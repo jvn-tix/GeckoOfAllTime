@@ -1,19 +1,31 @@
 fileFormatVersion: 2
-guid: b49a74a9cd06dfb4db82adce6f82ba30
+guid: 9b1691b245b99fe4ebd4df2306f0c493
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -767842634614617014
-    second: Ant_0
+      213: -3368693272873965733
+    second: Bee Hit_0
   - first:
-      213: -5720907883160835152
-    second: Ant_1
+      213: 1430915776336362181
+    second: Bee Hit_1
   - first:
-      213: 8088607974869636516
-    second: Ant_2
+      213: -816969255914144305
+    second: Bee Hit_2
   - first:
-      213: 6536075636304528495
-    second: Ant_3
+      213: 1794392115025500100
+    second: Bee Hit_3
+  - first:
+      213: 8036024492389764141
+    second: Bee Hit_4
+  - first:
+      213: -8383307938185452699
+    second: Bee Hit_5
+  - first:
+      213: 5277020885424217710
+    second: Bee Hit_6
+  - first:
+      213: 3107938665469252978
+    second: Bee Hit_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -60,7 +72,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -122,12 +134,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ant_0
+      name: Bee Hit_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 15
+        x: 3
+        y: 4
+        width: 18
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -137,20 +149,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a4c456821331855f0800000000000000
-      internalID: -767842634614617014
+      spriteID: b576911015fff31d0800000000000000
+      internalID: -3368693272873965733
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ant_1
+      name: Bee Hit_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 16
+        x: 26
+        y: 3
+        width: 20
+        height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,20 +171,42 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0bb677747904b90b0800000000000000
-      internalID: -5720907883160835152
+      spriteID: 5caf7083152abd310800000000000000
+      internalID: 1430915776336362181
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ant_2
+      name: Bee Hit_2
       rect:
         serializedVersion: 2
-        x: 33
+        x: 50
+        y: 3
+        width: 20
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcd72dc4aca89a4f0800000000000000
+      internalID: -816969255914144305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bee Hit_3
+      rect:
+        serializedVersion: 2
+        x: 73
         y: 1
-        width: 15
-        height: 15
+        width: 22
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,20 +215,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4a51f7d0912804070800000000000000
-      internalID: 8088607974869636516
+      spriteID: 4c75bdb1f16f6e810800000000000000
+      internalID: 1794392115025500100
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ant_3
+      name: Bee Hit_4
       rect:
         serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 16
+        x: 96
+        y: 1
+        width: 24
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -203,8 +237,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f64440f592ec4ba50800000000000000
-      internalID: 6536075636304528495
+      spriteID: d2c0b3bf2b1b58f60800000000000000
+      internalID: 8036024492389764141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bee Hit_5
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 1
+        width: 25
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5636ebdc8d188ab80800000000000000
+      internalID: -8383307938185452699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bee Hit_6
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 3
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6e1704598ebb3940800000000000000
+      internalID: 5277020885424217710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bee Hit_7
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 4
+        width: 24
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2751ffaefbd912b20800000000000000
+      internalID: 3107938665469252978
       vertices: []
       indices: 
       edges: []
@@ -223,10 +323,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Ant_0: -767842634614617014
-      Ant_1: -5720907883160835152
-      Ant_2: 8088607974869636516
-      Ant_3: 6536075636304528495
+      Bee Hit_0: -3368693272873965733
+      Bee Hit_1: 1430915776336362181
+      Bee Hit_2: -816969255914144305
+      Bee Hit_3: 1794392115025500100
+      Bee Hit_4: 8036024492389764141
+      Bee Hit_5: -8383307938185452699
+      Bee Hit_6: 5277020885424217710
+      Bee Hit_7: 3107938665469252978
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
