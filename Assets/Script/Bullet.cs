@@ -8,11 +8,16 @@ public class Bullet : MonoBehaviour
     public float lifeTime = 3f; // Peluru hancur otomatis setelah 3 detik jika tidak kena apa-apa
     public float knockbackForce = 6f;
 
+    [Header("VFX Settings")]
+    [SerializeField] private GameObject hitVfxPrefab;
+
     private Rigidbody2D rb;
+    private TrailRenderer trail;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        trail = GetComponent<TrailRenderer>();
 
         // Menggunakan linearVelocity untuk Unity versi terbaru / 2D Physics
         rb.linearVelocity = transform.up * speed;
@@ -44,8 +49,39 @@ public class Bullet : MonoBehaviour
                 movement.ApplyKnockback(transform.up, knockbackForce);
             }
 
-            // Hancurkan peluru saat kena musuh
-            Destroy(gameObject);
+            if(hitVfxPrefab != null)
+            {
+                // Buat efek visual saat peluru menabrak musuh
+                Instantiate(hitVfxPrefab, transform.position, Quaternion.identity);
+            }
+
+            DestroyBullet();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // Jika peluru hancur karena waktu (lifetime habis), lepaskan trail-nya
+        DetachTrail();
+    }
+
+    // Fungsi khusus untuk menghancurkan peluru tanpa memutus jejak trail secara mendadak
+    private void DestroyBullet()
+    {
+        DetachTrail();
+        Destroy(gameObject);
+    }
+
+    private void DetachTrail()
+    {
+        if (trail != null)
+        {
+            // Lepas trail dari peluru agar bisa memudar dengan mulus
+            trail.transform.parent = null;
+            trail.emitting = false;
+
+            // Hancurkan objek trail secara otomatis setelah waktu Trail habis
+            Destroy(trail.gameObject, trail.time);
         }
     }
 }
