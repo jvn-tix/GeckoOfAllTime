@@ -19,6 +19,11 @@ public class Health : MonoBehaviour
     private bool useFlashMaterial;
     private static readonly int FlashAmountID = Shader.PropertyToID("_FlashAmount");
 
+    [Header("Hit Squish Settings")]
+    [SerializeField] private bool enableSquish = true;
+    [SerializeField] private float squishDuration = 0.15f;
+    [SerializeField] private Vector2 squishScale = new Vector2(1.25f, 0.75f); // X melebar, Y memipih
+
     [Header("UI Reference (Only For Player)")]
     [SerializeField] private PlayerHealthBar healthBar;
 
@@ -33,10 +38,13 @@ public class Health : MonoBehaviour
     [SerializeField] private DamagePopup damagePopupPrefab;
 
     [SerializeField] private Animator animator;
+    private Vector3 originalScale;
+    private Coroutine squishRoutine;
 
     void Awake()
     {
         currentHealth = maxHealth;
+        originalScale = transform.localScale;
 
         if(animator == null)
         {
@@ -76,7 +84,7 @@ public class Health : MonoBehaviour
             animator.SetTrigger("Hit");
         }
 
-        Debug.Log(gameObject.name + " HP Sekarang: " + currentHealth);
+        // Debug.Log(gameObject.name + " HP Sekarang: " + currentHealth);
 
         UpdateUI();
 
@@ -90,6 +98,12 @@ public class Health : MonoBehaviour
         if (spriteRenderer != null)
         {
             StartCoroutine(HitFlashRoutine());
+        }
+
+        if (enableSquish)
+        {
+            if (squishRoutine != null) StopCoroutine(squishRoutine);
+            squishRoutine = StartCoroutine(HitSquishRoutine());
         }
 
         if (currentHealth <= 0)
@@ -113,7 +127,7 @@ public class Health : MonoBehaviour
         // 3. Refresh UI Health Bar
         UpdateUI();
 
-        //Debug.Log($"{gameObject.name} Max HP bertambah {additionalHP}! Total Max HP: {maxHealth}");
+        // Debug.Log($"{gameObject.name} Max HP bertambah {additionalHP}! Total Max HP: {maxHealth}");
     }
 
     public void Heal(float amount)
@@ -131,6 +145,32 @@ public class Health : MonoBehaviour
 
         if (useFlashMaterial) SetFlash(0f);
         else spriteRenderer.color = originalColor;
+    }
+
+    private IEnumerator HitSquishRoutine()
+    {
+        // Simpan ukuran asli sebelum digepengkan
+        Vector3 baseScale = transform.localScale;
+
+        // Terapkan efek squish instan
+        transform.localScale = new Vector3(baseScale.x * squishScale.x, baseScale.y * squishScale.y, baseScale.z);
+
+        float timer = 0f;
+        while (timer < squishDuration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / squishDuration;
+            
+            // Kembalikan perlahan ke ukuran asli
+            transform.localScale = Vector3.Lerp(
+                new Vector3(baseScale.x * squishScale.x, baseScale.y * squishScale.y, baseScale.z),
+                baseScale,
+                t
+            );
+            yield return null;
+        }
+
+        transform.localScale = baseScale;
     }
 
     private void SetFlash(float amount)
@@ -157,7 +197,7 @@ public class Health : MonoBehaviour
 
         if (CompareTag("Player"))
         {
-            //Debug.Log("Player Mati! Game Over.");
+            // Debug.Log("Player Mati! Game Over.");
             gameObject.SetActive(false);
             if(GameOverManager.Instance != null)
             {

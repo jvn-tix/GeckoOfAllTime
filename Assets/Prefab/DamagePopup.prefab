@@ -83,7 +83,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -449205007
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -134,8 +134,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 8
-  m_fontSizeBase: 8
+  m_fontSize: 7
+  m_fontSizeBase: 7
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -199,5 +199,7 @@ MonoBehaviour:
   sideSpeed: 1.5
   gravity: 14
   lifetime: 0.7
-  popScale: 1.4
   popDuration: 0.12
+  initialPopMultiplier: 1.5
+  globalSizeMultiplier: 1
+  damageScaleFactor: 0.1

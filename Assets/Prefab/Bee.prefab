@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 2995078418777435509}
   - component: {fileID: 1334750895206353938}
   - component: {fileID: 9084193917066916507}
+  - component: {fileID: 8254364226975547435}
   - component: {fileID: 4368292572957735996}
   - component: {fileID: 4491833423393436513}
   - component: {fileID: 3146114667839447910}
-  - component: {fileID: 8254364226975547435}
   m_Layer: 0
   m_Name: Bee
   m_TagString: Enemy
@@ -146,58 +146,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &4368292572957735996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732550917126448614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 029c9da8ce61efc4880f212d22ee848b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  moveSpeed: 4.5
-  rotationOffset: -90
-  knockbackResistance: 0
-  knockbackDuration: 0.12
---- !u!114 &4491833423393436513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732550917126448614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c75a0e09207c9324090f7c77d2e95bbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 5
-  hitColor: {r: 1, g: 1, b: 1, a: 1}
-  hitColorDuration: 0.1
-  flashAmount: 0.5
-  healthBar: {fileID: 0}
-  expOrbPrefab: {fileID: 4065178976242850119, guid: 8491a6119656669488c9c125ab0043c5, type: 3}
-  deathSfx: {fileID: 8300000, guid: b4c6a119bce925340ac4b35d29301123, type: 3}
-  deathSfxVolume: 0.5
-  damagePopupPrefab: {fileID: 9197689860451478448, guid: a110bdd1fff1b5849a38dccd209c759f, type: 3}
-  animator: {fileID: 0}
---- !u!114 &3146114667839447910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732550917126448614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4656c0c9cd4ae4346aa1ba88a02bdea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
-  damageAmount: 2
-  damageInterval: 0.5
 --- !u!70 &8254364226975547435
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -235,3 +183,58 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.24999999, y: 0.24999999}
   m_Direction: 0
+--- !u!114 &4368292572957735996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732550917126448614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 029c9da8ce61efc4880f212d22ee848b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  moveSpeed: 4.5
+  rotationOffset: -90
+  knockbackResistance: 0
+  knockbackDuration: 0.12
+--- !u!114 &4491833423393436513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732550917126448614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c75a0e09207c9324090f7c77d2e95bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  maxHealth: 5
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  hitColorDuration: 0.1
+  flashAmount: 0.5
+  enableSquish: 1
+  squishDuration: 0.35
+  squishScale: {x: 1.5, y: 0.5}
+  healthBar: {fileID: 0}
+  expOrbPrefab: {fileID: 4065178976242850119, guid: 8491a6119656669488c9c125ab0043c5, type: 3}
+  deathSfx: {fileID: 8300000, guid: b4c6a119bce925340ac4b35d29301123, type: 3}
+  deathSfxVolume: 0.5
+  damagePopupPrefab: {fileID: 9197689860451478448, guid: a110bdd1fff1b5849a38dccd209c759f, type: 3}
+  animator: {fileID: 0}
+--- !u!114 &3146114667839447910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732550917126448614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4656c0c9cd4ae4346aa1ba88a02bdea1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
+  damageAmount: 2
+  damageInterval: 0.5

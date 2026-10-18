@@ -4443,8 +4443,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4622,6 +4622,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameTimer
   timeRemaining: 300
   timerText: {fileID: 1807350075}
+  urgentThreshold: 10
+  maxScaleMultiplier: 1.8
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  warningColor: {r: 1, g: 0, b: 0, a: 1}
+  tickSfx: {fileID: 8300000, guid: 8f8cbaee1bbd0614faf59230f3ba38ce, type: 3}
+  tickVolume: 1
 --- !u!4 &1852105071
 Transform:
   m_ObjectHideFlags: 0
@@ -5240,6 +5246,9 @@ MonoBehaviour:
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   hitColorDuration: 0.2
   flashAmount: 0.5
+  enableSquish: 1
+  squishDuration: 0.15
+  squishScale: {x: 1.25, y: 0.75}
   healthBar: {fileID: 330360383}
   expOrbPrefab: {fileID: 0}
   deathSfx: {fileID: 0}

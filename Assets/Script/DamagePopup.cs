@@ -10,14 +10,19 @@ public class DamagePopup : MonoBehaviour
     [SerializeField] private float sideSpeed = 1.5f;
     [SerializeField] private float gravity = 14f;
 
-    [Header("Timing")]
+    [Header("Timing & Pop Effect")]
     [SerializeField] private float lifetime = 0.7f;
-    [SerializeField] private float popScale = 1.4f;
     [SerializeField] private float popDuration = 0.12f;
+    [SerializeField] private float initialPopMultiplier = 1.5f; // Seberapa besar efek "pop" melar di awal
+
+    [Header("Damage Scaling")]
+    [SerializeField] private float globalSizeMultiplier = 1f;  // Atur ini di Unity buat gedein/kecilin semua teks secara instan
+    [SerializeField] private float damageScaleFactor = 0.1f;   // Makin besar angka ini, makin drastis perbedaan teks kecil vs besar
 
     private Vector2 velocity;
     private float timer;
     private Color baseColor;
+    private float targetScale = 1f;
 
     private void Awake()
     {
@@ -29,19 +34,24 @@ public class DamagePopup : MonoBehaviour
     {
         text.text = damage.ToString();
         velocity = new Vector2(Random.Range(-sideSpeed, sideSpeed), jumpSpeed);
+
+        // Menghitung ukuran berdasarkan besar damage + dikali pengatur dari inspector
+        // Contoh: damage 10 -> skala 1, damage 50 -> skala jauh lebih besar
+        targetScale = globalSizeMultiplier * (1f + (damage * damageScaleFactor));
     }
 
     private void Update()
     {
         timer += Time.deltaTime;
 
-        // Gerak lompat: kecepatan ke atas berkurang terus oleh gravitasi
+        // Gerak lompat
         velocity.y -= gravity * Time.deltaTime;
         transform.position += (Vector3)(velocity * Time.deltaTime);
 
-        // Efek pop: mulai besar, mengecil ke ukuran normal
+        // Efek pop (mulai dari lebih besar, lalu mengecil ke targetScale)
         float popT = Mathf.Clamp01(timer / popDuration);
-        transform.localScale = Vector3.one * Mathf.Lerp(popScale, 1f, popT);
+        float currentScale = Mathf.Lerp(targetScale * initialPopMultiplier, targetScale, popT);
+        transform.localScale = Vector3.one * currentScale;
 
         // Memudar di paruh akhir umur
         float t = timer / lifetime;
