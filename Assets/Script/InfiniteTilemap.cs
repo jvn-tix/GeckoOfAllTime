@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 
 public class InfiniteTilemap : MonoBehaviour
 {
@@ -20,7 +21,8 @@ public class InfiniteTilemap : MonoBehaviour
 
     [Header("Camera & Margin")]
     [SerializeField] private Camera cam;
-    [SerializeField] private int margin = 2;
+    [SerializeField] private int renderMargin = 4;   // Jarak area render di depan kamera
+    [SerializeField] private int destroyMargin = 8;  // Jarak batas maksimal sebelum tile di belakang dihapus (culling)
 
     private Vector3Int lastMin;
     private Vector3Int lastMax;
@@ -37,17 +39,11 @@ public class InfiniteTilemap : MonoBehaviour
         float halfW = halfH * cam.aspect;
         Vector3 c = cam.transform.position;
 
-        Vector3Int min = tilemap.WorldToCell(new Vector3(c.x - halfW, c.y - halfH, 0))
-                         - new Vector3Int(margin, margin, 0);
-        Vector3Int max = tilemap.WorldToCell(new Vector3(c.x + halfW, c.y + halfH, 0))
-                         + new Vector3Int(margin, margin, 0);
+        // Area yang sedang dilihat kamera + margin render
+        Vector3Int min = tilemap.WorldToCell(new Vector3(c.x - halfW, c.y - halfH, 0)) - new Vector3Int(renderMargin, renderMargin, 0);
+        Vector3Int max = tilemap.WorldToCell(new Vector3(c.x + halfW, c.y + halfH, 0)) + new Vector3Int(renderMargin, renderMargin, 0);
 
         if (hasPainted && min == lastMin && max == lastMax) return;
-
-        // Bersihkan semua tilemap
-        tilemap.ClearAllTiles();
-        if (decoTilemap1 != null) decoTilemap1.ClearAllTiles();
-        if (decoTilemap2 != null) decoTilemap2.ClearAllTiles();
 
         // 1. Generate Tanah (Ground) dan Layer 1 (Kecil)
         for (int x = min.x; x <= max.x; x++)
@@ -55,20 +51,27 @@ public class InfiniteTilemap : MonoBehaviour
             for (int y = min.y; y <= max.y; y++)
             {
                 Vector3Int cellPos = new Vector3Int(x, y, 0);
-                tilemap.SetTile(cellPos, groundTile);
+
+                // Hanya pasang ground jika tile-nya masih kosong
+                if (tilemap.GetTile(cellPos) == null)
+                {
+                    tilemap.SetTile(cellPos, groundTile);
+                }
 
                 // Layer 1 (Kecil)
                 if (decoTilemap1 != null && smallDecorations != null && smallDecorations.Length > 0)
                 {
-                    float random1 = GetDeterministicRandom(x, y, 1337);
-                    if (random1 < deco1Density)
+                    if (decoTilemap1.GetTile(cellPos) == null)
                     {
-                        int index = Mathf.FloorToInt(GetDeterministicRandom(x, y, 9999) * smallDecorations.Length);
-                        index = Mathf.Clamp(index, 0, smallDecorations.Length - 1);
-                        
-                        if (smallDecorations[index] != null) 
-                            decoTilemap1.SetTile(cellPos, smallDecorations[index]);
-                    }
+                        float random1 = GetDeterministicRandom(x, y, 1337);
+                        if (random1 < deco1Density)
+                        {
+                            int index = Mathf.FloorToInt(GetDeterministicRandom(x, y, 9999) * smallDecorations.Length);
+                            index = Mathf.Clamp(index, 0, smallDecorations.Length - 1);
+                            if (smallDecorations[index] != null) 
+                                decoTilemap1.SetTile(cellPos, smallDecorations[index]);
+                        }
+                    }       
                 }
             }
         }
@@ -93,22 +96,36 @@ public class InfiniteTilemap : MonoBehaviour
                         // Tentukan posisi pasti (x, y) di dalam blok area tersebut secara konsisten
                         int localX = Mathf.FloorToInt(GetDeterministicRandom(cx, cy, 1111) * gridCellSize);
                         int localY = Mathf.FloorToInt(GetDeterministicRandom(cx, cy, 2222) * gridCellSize);
-
                         int worldX = cx * gridCellSize + localX;
                         int worldY = cy * gridCellSize + localY;
 
                         Vector3Int largeCellPos = new Vector3Int(worldX, worldY, 0);
-
-                        // Pilih variasi jenis dekorasi besar secara konsisten
-                        int index = Mathf.FloorToInt(GetDeterministicRandom(cx, cy, 5555) * largeDecorations.Length);
-                        index = Mathf.Clamp(index, 0, largeDecorations.Length - 1);
-
-                        if (largeDecorations[index] != null)
+                        if (decoTilemap2.GetTile(largeCellPos) == null)
                         {
-                            decoTilemap2.SetTile(largeCellPos, largeDecorations[index]);
-                        }
+                            int index = Mathf.FloorToInt(GetDeterministicRandom(cx, cy, 5555) * largeDecorations.Length);
+                            index = Mathf.Clamp(index, 0, largeDecorations.Length - 1);
+                            if (largeDecorations[index] != null)
+                                decoTilemap2.SetTile(largeCellPos, largeDecorations[index]);
+                        }   
                     }
                 }
+            }
+        }
+
+        // 2. CULLING (Hapus tile yang sudah TERLALU JAUH di luar layar agar game tidak berat)
+        // Kita hitung batas area yang terlalu jauh berdasarkan destroyMargin
+        Vector3Int cullMin = min - new Vector3Int(destroyMargin, destroyMargin, 0);
+        Vector3Int cullMax = max + new Vector3Int(destroyMargin, destroyMargin, 0);
+
+        // Bersihkan tile Ground yang di luar batas culling
+        BoundsInt groundBounds = tilemap.cellBounds;
+        foreach (var pos in tilemap.cellBounds.allPositionsWithin)
+        {
+            if (pos.x < cullMin.x || pos.x > cullMax.x || pos.y < cullMin.y || pos.y > cullMax.y)
+            {
+                tilemap.SetTile(pos, null);
+                if (decoTilemap1 != null) decoTilemap1.SetTile(pos, null);
+                if (decoTilemap2 != null) decoTilemap2.SetTile(pos, null);
             }
         }
 
