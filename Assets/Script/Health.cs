@@ -40,6 +40,17 @@ public class Health : MonoBehaviour
     [SerializeField] private Animator animator;
     private Vector3 originalScale;
     private Coroutine squishRoutine;
+    private bool isInitialized = false;
+
+    // Pastikan di Awake() atau Start() nilai originalScale disimpan sekali
+    private void InitScale()
+    {
+        if (!isInitialized)
+        {
+            originalScale = transform.localScale;
+            isInitialized = true;
+        }
+    }
 
     void Awake()
     {
@@ -76,6 +87,8 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        InitScale(); // Pastikan skala asli tersimpan
+
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
@@ -102,6 +115,7 @@ public class Health : MonoBehaviour
 
         if (enableSquish)
         {
+            // Hentikan coroutine squish sebelumnya agar tidak numpuk & nyangkut
             if (squishRoutine != null) StopCoroutine(squishRoutine);
             squishRoutine = StartCoroutine(HitSquishRoutine());
         }
@@ -149,11 +163,16 @@ public class Health : MonoBehaviour
 
     private IEnumerator HitSquishRoutine()
     {
-        // Simpan ukuran asli sebelum digepengkan
-        Vector3 baseScale = transform.localScale;
+        InitScale();
 
-        // Terapkan efek squish instan
-        transform.localScale = new Vector3(baseScale.x * squishScale.x, baseScale.y * squishScale.y, baseScale.z);
+        // Selalu mulai dari ukuran asli yang bersih (mencegah penumpukan gepeng)
+        transform.localScale = originalScale;
+
+        // Hitung target skala gepeng berdasarkan originalScale asli
+        Vector3 squishedScale = new Vector3(originalScale.x * squishScale.x, originalScale.y * squishScale.y, originalScale.z);
+
+        // Ubah instan ke bentuk gepeng
+        transform.localScale = squishedScale;
 
         float timer = 0f;
         while (timer < squishDuration)
@@ -161,16 +180,14 @@ public class Health : MonoBehaviour
             timer += Time.deltaTime;
             float t = timer / squishDuration;
             
-            // Kembalikan perlahan ke ukuran asli
-            transform.localScale = Vector3.Lerp(
-                new Vector3(baseScale.x * squishScale.x, baseScale.y * squishScale.y, baseScale.z),
-                baseScale,
-                t
-            );
+            // Kembali secara mulus dari bentuk gepeng ke ukuran original
+            transform.localScale = Vector3.Lerp(squishedScale, originalScale, t);
             yield return null;
         }
 
-        transform.localScale = baseScale;
+        // Pastikan di akhir benar-benar kembali normal
+        transform.localScale = originalScale;
+        squishRoutine = null;
     }
 
     private void SetFlash(float amount)
