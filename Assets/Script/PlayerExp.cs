@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerExp : MonoBehaviour
 {
+    public static PlayerExp Instance { get; private set; }
     [Header("Level & EXP Settings")]
     [SerializeField] private int currentLevel = 1;
     [SerializeField] private int currentExp = 0;
@@ -17,6 +18,10 @@ public class PlayerExp : MonoBehaviour
 
     [SerializeField] private LevelUpManager levelUpManager;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         UpdateUI();
@@ -86,4 +91,6 @@ public class PlayerExp : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, pickupRadius);
     }
+
+    public int  GetCurrentLevel() => currentLevel;
 }

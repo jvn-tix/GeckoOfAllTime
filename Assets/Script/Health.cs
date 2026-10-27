@@ -37,10 +37,14 @@ public class Health : MonoBehaviour
     [Header("Damage Popup (Only For Enemy)")]
     [SerializeField] private DamagePopup damagePopupPrefab;
 
-    [SerializeField] private Animator animator;
+    [Header("Health Scaling (Only For Enemy)")]
+    [SerializeField] private bool ScaleWithGeckLevel = false;
+    [SerializeField] private float HeatlthPerLevel = 0.1f;
+    private Animator animator;
     private Vector3 originalScale;
     private Coroutine squishRoutine;
     private bool isInitialized = false;
+    private int baseMaxHealth;
 
     // Pastikan di Awake() atau Start() nilai originalScale disimpan sekali
     private void InitScale()
@@ -54,6 +58,7 @@ public class Health : MonoBehaviour
 
     void Awake()
     {
+        baseMaxHealth = maxHealth;
         currentHealth = maxHealth;
         originalScale = transform.localScale;
 
@@ -81,8 +86,24 @@ public class Health : MonoBehaviour
             healthBar = GetComponentInChildren<PlayerHealthBar>();
         }
 
+        if (ScaleWithGeckLevel)
+        {
+            ApplyHealthScaling();
+        }
+
         UpdateUI();
 
+    }
+
+    private void ApplyHealthScaling()
+    {
+        if(PlayerExp.Instance == null) return;
+
+        int level = PlayerExp.Instance.GetCurrentLevel();
+        float multiplier = 1f + (level - 1) * HeatlthPerLevel;
+
+        maxHealth = Mathf.RoundToInt(baseMaxHealth * multiplier);
+        currentHealth = maxHealth;
     }
 
     public void TakeDamage(int damage)
