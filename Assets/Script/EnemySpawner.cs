@@ -6,16 +6,27 @@ public class EnemySpawner : MonoBehaviour
     public class EnemyData
     {
         public string enemyName = "Basic Enemy";
-        public GameObject enemyPrefab; // Prefab musuh
-        [Range(1, 100)] public int spawnWeight = 10; // Semakin besar angka, semakin sering muncul
+        public GameObject enemyPrefab;
+
+        [Header("Weight per fase")]
+        [Min(0)] public int earlyWeight = 10;
+        [Min(0)] public int midWeight = 10;
+        [Min(0)] public int lateWeight = 10;
     }
+
+    private enum Phase { Early, Mid, Late }
 
     [Header("Enemy Types Configuration")]
     [SerializeField] private EnemyData[] enemyTypes;
 
     [Header("Spawn Settings")]
-    [SerializeField] private float spawnInterval = 1f; // Jeda waktu antar spawn (detik)
-    [SerializeField] private float spawnDistance = 20f; // Jarak spawn di luar kamera dari player
+    [SerializeField] private float spawnInterval = 1f;
+    [SerializeField] private float spawnDistance = 20f;
+
+    [Header("Progression")]
+    [SerializeField] private float totalGameDuration = 600f; // samakan dengan durasi GameTimer (detik)
+    [SerializeField, Range(0f, 1f)] private float midPhaseStart = 0.33f;
+    [SerializeField, Range(0f, 1f)] private float latePhaseStart = 0.66f;
 
     private Transform playerTransform;
     private float nextSpawnTime;
@@ -28,16 +39,11 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        // Cari Player berdasarkan Tag
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
-        {
             playerTransform = playerObj.transform;
-        }
         else
-        {
             Debug.LogError("EnemySpawner: Tidak menemukan GameObject dengan Tag 'Player'!");
-        }
     }
 
     void Update()
@@ -51,6 +57,33 @@ public class EnemySpawner : MonoBehaviour
                 SpawnRandomEnemy();
             }
             nextSpawnTime = Time.time + spawnInterval / GetSpawnMultiplier();
+        }
+    }
+
+    // 0 = awal game, 1 = akhir game
+    private float GetGameProgress()
+    {
+        if (gameTimer == null || totalGameDuration <= 0f) return 0f;
+
+        float elapsed = totalGameDuration - gameTimer.TimeRemaining;
+        return Mathf.Clamp01(elapsed / totalGameDuration);
+    }
+
+    private Phase GetCurrentPhase()
+    {
+        float progress = GetGameProgress();
+        if (progress >= latePhaseStart) return Phase.Late;
+        if (progress >= midPhaseStart) return Phase.Mid;
+        return Phase.Early;
+    }
+
+    private int GetWeight(EnemyData enemy, Phase phase)
+    {
+        switch (phase)
+        {
+            case Phase.Early: return enemy.earlyWeight;
+            case Phase.Mid: return enemy.midWeight;
+            default: return enemy.lateWeight;
         }
     }
 
@@ -69,44 +102,41 @@ public class EnemySpawner : MonoBehaviour
     {
         if (enemyTypes == null || enemyTypes.Length == 0) return;
 
-        // Pilih musuh secara acak berdasarkan Bobot (Spawn Weight)
         GameObject selectedEnemyPrefab = GetRandomEnemyPrefab();
 
         if (selectedEnemyPrefab != null)
         {
-            // Hitung posisi melingkar acak di luar jarak pandang Player
             Vector2 randomDirection = Random.insideUnitCircle.normalized;
             Vector3 spawnPosition = playerTransform.position + new Vector3(randomDirection.x, randomDirection.y, 0f) * spawnDistance;
 
-            // Spawn Musuh
             Instantiate(selectedEnemyPrefab, spawnPosition, Quaternion.identity);
         }
     }
 
     GameObject GetRandomEnemyPrefab()
     {
+        Phase phase = GetCurrentPhase();
+
         int totalWeight = 0;
         foreach (var enemy in enemyTypes)
-        {
-            totalWeight += enemy.spawnWeight;
-        }
+            totalWeight += GetWeight(enemy, phase);
+
+        // Kalau semua weight 0, fallback ke tipe pertama
+        if (totalWeight <= 0) return enemyTypes[0].enemyPrefab;
 
         int randomValue = Random.Range(0, totalWeight);
         int currentWeightSum = 0;
 
         foreach (var enemy in enemyTypes)
         {
-            currentWeightSum += enemy.spawnWeight;
+            currentWeightSum += GetWeight(enemy, phase);
             if (randomValue < currentWeightSum)
-            {
                 return enemy.enemyPrefab;
-            }
         }
 
         return enemyTypes[0].enemyPrefab;
     }
 
-    // Visualisasi jarak spawn di Scene View
     private void OnDrawGizmosSelected()
     {
         if (playerTransform != null)

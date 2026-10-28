@@ -4626,7 +4626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3733ebbf273d4d346b58b99eb448462d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameTimer
-  timeRemaining: 300
+  timeRemaining: 120
   timerText: {fileID: 1807350075}
   urgentThreshold: 10
   maxScaleMultiplier: 1.8
@@ -4889,15 +4889,24 @@ MonoBehaviour:
   enemyTypes:
   - enemyName: Ant
     enemyPrefab: {fileID: 6975376387698333368, guid: ccee4bacc22f5884c9a15ddc4ca3d57d, type: 3}
-    spawnWeight: 100
+    earlyWeight: 20
+    midWeight: 50
+    lateWeight: 60
   - enemyName: Bee
     enemyPrefab: {fileID: 732550917126448614, guid: f4228cf778e0a9941945234f098d8804, type: 3}
-    spawnWeight: 1
+    earlyWeight: 80
+    midWeight: 50
+    lateWeight: 0
   - enemyName: Dragonfly
     enemyPrefab: {fileID: 4839827384199338358, guid: aaa578fffa7106948b5cded2c054f955, type: 3}
-    spawnWeight: 1
-  spawnInterval: 1
+    earlyWeight: 0
+    midWeight: 20
+    lateWeight: 100
+  spawnInterval: 0.8
   spawnDistance: 20
+  totalGameDuration: 300
+  midPhaseStart: 0.33
+  latePhaseStart: 0.66
   gameTimer: {fileID: 1852105070}
   endgameDuration: 120
   endgameCurve:
@@ -5248,7 +5257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75a0e09207c9324090f7c77d2e95bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 20
+  maxHealth: 99999
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   hitColorDuration: 0.2
   flashAmount: 0.5
