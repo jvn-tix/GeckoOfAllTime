@@ -12,13 +12,10 @@ public class LevelUpManager : MonoBehaviour
     [SerializeField] private GameObject cardPrefab;
 
     [Header("Player References")]
-    [SerializeField] private Health playerHealth;
-    [SerializeField] private TurretController playerAttack; // Sesuaikan dengan nama script attack kamu
+    [SerializeField] private TurretController playerAttack;
 
     [Header("Audio")]
     [SerializeField] private AudioClip levelUpSfx;
-
-    private List<PowerUpData> currentOfferedPowerUps = new List<PowerUpData>();
 
     public void TriggerLevelUp()
     {
@@ -27,7 +24,7 @@ public class LevelUpManager : MonoBehaviour
 
     private void ShowUpgradeScreen()
     {
-        Time.timeScale = 0f; // Pause Game
+        Time.timeScale = 0f;
         if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(levelUpSfx);
         levelUpPanel.SetActive(true);
 
@@ -36,56 +33,57 @@ public class LevelUpManager : MonoBehaviour
 
     private void GenerateOptions()
     {
-        // Bersihkan kartu dari pemilihan sebelumnya
         foreach (Transform child in cardContainer)
         {
             Destroy(child.gameObject);
         }
 
-        // Ambil 2 opsi acak unik dari pool
-        currentOfferedPowerUps = GetRandomPowerUps(2);
+        // Pilih 2 power up unik, lalu roll preset-nya SEKALI di sini
+        List<PowerUpData> chosen = GetRandomPowerUps(2);
 
-        // Spawn 2 Kartu UI ke layar
-        foreach (PowerUpData data in currentOfferedPowerUps)
+        foreach (PowerUpData data in chosen)
         {
+            PowerUpOffer offer = data.CreateOffer();
+
             GameObject newCard = Instantiate(cardPrefab, cardContainer);
             PowerUpCardUI cardUI = newCard.GetComponent<PowerUpCardUI>();
             if (cardUI != null)
             {
-                cardUI.Setup(data, this);
+                cardUI.Setup(offer, this);
             }
         }
     }
 
-    public void SelectPowerUp(PowerUpData selectedPowerUp)
+    public void SelectPowerUp(PowerUpOffer offer)
     {
         if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
-        // Tambahkan status ke Player
-        ApplyPowerUp(selectedPowerUp);
 
-        // Tutup UI & Resume Game
+        ApplyPowerUp(offer);
+
         levelUpPanel.SetActive(false);
         Time.timeScale = 1f;
     }
 
-    private void ApplyPowerUp(PowerUpData powerUp)
+    private void ApplyPowerUp(PowerUpOffer offer)
     {
-        switch (powerUp.type)
+        if (playerAttack == null) return;
+
+        switch (offer.data.type)
         {
             case PowerUpType.Damage:
-                if (playerAttack != null) playerAttack.AddDamage(powerUp.value);
+                playerAttack.AddDamage(offer.finalValue);
                 break;
 
             case PowerUpType.FireRate:
-                if (playerAttack != null) playerAttack.AddFireRate(powerUp.value);
+                playerAttack.AddFireRate(offer.finalValue);
                 break;
 
             case PowerUpType.AdditionalProjectile:
-                if (playerAttack != null) playerAttack.AddProjectileCount((int)powerUp.value);
+                playerAttack.AddProjectileCount((int)offer.finalValue);
                 break;
 
-            case PowerUpType.MaxHP:
-                if (playerHealth != null) playerHealth.AddMaxHealth(powerUp.value);
+            case PowerUpType.ClusterBullet:
+                playerAttack.EnableCluster(offer.finalValue);
                 break;
         }
     }
@@ -99,7 +97,7 @@ public class LevelUpManager : MonoBehaviour
         {
             int randomIndex = Random.Range(0, pool.Count);
             result.Add(pool[randomIndex]);
-            pool.RemoveAt(randomIndex); // Cegah opsi ganda
+            pool.RemoveAt(randomIndex);
         }
 
         return result;

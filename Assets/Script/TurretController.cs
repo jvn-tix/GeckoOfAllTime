@@ -11,6 +11,13 @@ public class TurretController : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform firePoint;
 
+    [Header("Cluster Bullet")]
+    [SerializeField] private int baseClusterCount = 3;
+    [SerializeField] private int maxClusterCount = 6;
+    private bool clusterEnabled = false;
+    private float clusterDamageMultiplier = 0.5f;
+    private int clusterCount = 0;
+
     [Header("Audio")]
     [SerializeField] private AudioClip shootSfx;
     [SerializeField, Range(0f, 1f)] private float shootSfxVolume = 0.4f;
@@ -89,6 +96,7 @@ public class TurretController : MonoBehaviour
         if (bulletScript != null)
         {
             bulletScript.SetDamage(bulletDamage);
+            bulletScript.SetCluster(clusterEnabled, clusterDamageMultiplier, bulletPrefab, clusterCount);
         }
     }
 
@@ -111,5 +119,20 @@ public class TurretController : MonoBehaviour
     {
         projectileCount += amount;
         //Debug.Log($"Jumlah peluru bertambah! Peluru saat ini: {projectileCount}");
+    }
+
+    public void EnableCluster(float damageMultiplier)
+    {
+        clusterEnabled = true;
+        clusterDamageMultiplier = damageMultiplier;
+
+        if(clusterCount == 0)
+        {
+            clusterCount = baseClusterCount;
+        }
+        else
+        {
+            clusterCount = Mathf.Min(maxClusterCount, clusterCount + 1);
+        }
     }
 }

@@ -2023,6 +2023,8 @@ MonoBehaviour:
   mainCam: {fileID: 519420031}
   bulletPrefab: {fileID: 6576087987998522880, guid: 7592065484edbed44a51c8bf43c6da09, type: 3}
   firePoint: {fileID: 1776162636}
+  baseClusterCount: 3
+  maxClusterCount: 6
   shootSfx: {fileID: 8300000, guid: 35b9e5c6de1c3bd498e269dcff1d2d6f, type: 3}
   shootSfxVolume: 0.5
   bulletDamage: 5
@@ -3375,6 +3377,7 @@ GameObject:
   - component: {fileID: 1358181934}
   - component: {fileID: 1358181933}
   - component: {fileID: 1358181935}
+  - component: {fileID: 1358181936}
   m_Layer: 0
   m_Name: CmCamera
   m_TagString: Untagged
@@ -3471,6 +3474,30 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &1358181936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358181932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseListener
+  ApplyAfter: 2
+  ChannelMask: 1
+  Gain: 1
+  Use2DDistance: 0
+  UseCameraSpace: 1
+  SignalCombinationMode: 0
+  ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &1365894549
 GameObject:
   m_ObjectHideFlags: 0
@@ -4820,26 +4847,47 @@ MonoBehaviour:
     title: ATK Boost
     description: Menambah serangan peluru sebesar +2
     icon: {fileID: 21300000, guid: 39e93f54531ee8843b274525fce8aa09, type: 3}
-    value: 2
+    value: 0
+    presets:
+    - tier: 0
+      weight: 60
+      value: 1
+    - tier: 1
+      weight: 30
+      value: 3
+    - tier: 2
+      weight: 10
+      value: 6
   - type: 1
     title: Rapid Fire
     description: Meningkatkan kecepatan tembak
     icon: {fileID: 21300000, guid: 50de86d3485ebf443a5769f9102d8b2e, type: 3}
-    value: 0.1
+    value: 0
+    presets:
+    - tier: 0
+      weight: 60
+      value: 0.1
+    - tier: 1
+      weight: 30
+      value: 0.3
+    - tier: 2
+      weight: 10
+      value: 0.6
   - type: 2
     title: Multi Shot
     description: Menambah +1 peluru tambahan tiap tembakan.
     icon: {fileID: 21300000, guid: 7537bfee147bc87449b9c7c33de5d2fa, type: 3}
     value: 1
+    presets: []
   - type: 3
-    title: Vitality
-    description: Menambah +10 Maksimal HP dan memulihkan HP.
+    title: Cluster
+    description: Memecah Peluru saat terkena Musuh
     icon: {fileID: -3296822413940604801, guid: d4d2d20233aed6e449eaf04bfb5b4068, type: 3}
-    value: 10
+    value: 0.5
+    presets: []
   levelUpPanel: {fileID: 1524126287}
   cardContainer: {fileID: 1384047206}
   cardPrefab: {fileID: 6757884932123991704, guid: e0ac59546d145044693d49d2d7b321a2, type: 3}
-  playerHealth: {fileID: 1902717782}
   playerAttack: {fileID: 758430497}
   levelUpSfx: {fileID: 8300000, guid: d120cabc32c3c8b40b949e6fc9517998, type: 3}
 --- !u!4 &1881077165
@@ -4966,8 +5014,9 @@ GameObject:
   - component: {fileID: 1902717782}
   - component: {fileID: 1902717783}
   - component: {fileID: 1902717784}
+  - component: {fileID: 1902717785}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Gecko
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5074,7 +5123,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -5265,6 +5314,8 @@ MonoBehaviour:
   squishDuration: 0.15
   squishScale: {x: 1.25, y: 0.75}
   healthBar: {fileID: 330360383}
+  shakeCameraOnHit: 1
+  shakeForce: 0.3
   expOrbPrefab: {fileID: 0}
   deathSfx: {fileID: 0}
   deathSfxVolume: 1
@@ -5305,8 +5356,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0057556927, y: 0.12374246}
-  m_Size: {x: 0.2503577, y: 0.65251505}
+  m_Offset: {x: -0.00002065301, y: 0.14107129}
+  m_Size: {x: 0.26191002, y: 0.6178574}
   m_Direction: 0
 --- !u!114 &1902717784
 MonoBehaviour:
@@ -5330,6 +5381,59 @@ MonoBehaviour:
     m_Bits: 8
   expBarUI: {fileID: 486872375}
   levelUpManager: {fileID: 1881077164}
+--- !u!114 &1902717785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902717775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &2003804976
 GameObject:
   m_ObjectHideFlags: 0

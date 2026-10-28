@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class Health : MonoBehaviour
 {
@@ -27,6 +28,10 @@ public class Health : MonoBehaviour
     [Header("UI Reference (Only For Player)")]
     [SerializeField] private PlayerHealthBar healthBar;
 
+    [Header("Camera Shake Settings (Only For Player)")]
+    [SerializeField] private bool shakeCameraOnHit = false;
+    [SerializeField] private float shakeForce = 0.3f;
+
     [Header("Drop Settings (Only For Enemy)")]
     [SerializeField] private GameObject expOrbPrefab;
 
@@ -45,8 +50,9 @@ public class Health : MonoBehaviour
     private Coroutine squishRoutine;
     private bool isInitialized = false;
     private int baseMaxHealth;
+    private CinemachineImpulseSource impulseSource;
 
-    // Pastikan di Awake() atau Start() nilai originalScale disimpan sekali
+
     private void InitScale()
     {
         if (!isInitialized)
@@ -77,6 +83,8 @@ public class Health : MonoBehaviour
 
             if (useFlashMaterial) propertyBlock = new MaterialPropertyBlock();
         }
+
+        impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     void Start()
@@ -118,8 +126,6 @@ public class Health : MonoBehaviour
             animator.SetTrigger("Hit");
         }
 
-        // Debug.Log(gameObject.name + " HP Sekarang: " + currentHealth);
-
         UpdateUI();
 
         if (damagePopupPrefab != null)
@@ -141,28 +147,15 @@ public class Health : MonoBehaviour
             squishRoutine = StartCoroutine(HitSquishRoutine());
         }
 
+        if(impulseSource != null && shakeCameraOnHit)
+        {
+            impulseSource.GenerateImpulseWithForce(shakeForce);
+        }
+
         if (currentHealth <= 0)
         {
             Die();
         }
-    }
-
-    // --- FUNCTION DIPANGGIL DARI LEVEL UP MANAGER ---
-    public void AddMaxHealth(float amount)
-    {
-        int additionalHP = Mathf.RoundToInt(amount);
-
-        // 1. Tambah Max Health
-        maxHealth += additionalHP;
-
-        // 2. Isi HP player sejumlah penambahan max HP tersebut
-        currentHealth += additionalHP;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-
-        // 3. Refresh UI Health Bar
-        UpdateUI();
-
-        // Debug.Log($"{gameObject.name} Max HP bertambah {additionalHP}! Total Max HP: {maxHealth}");
     }
 
     public void Heal(float amount)

@@ -5,24 +5,34 @@ public class Bullet : MonoBehaviour
     [Header("Bullet Settings")]
     public float speed = 15f;
     public int damage = 10;
-    public float lifeTime = 3f; // Peluru hancur otomatis setelah 3 detik jika tidak kena apa-apa
+    public float lifeTime = 3f;
     public float knockbackForce = 6f;
 
     [Header("VFX Settings")]
     [SerializeField] private GameObject hitVfxPrefab;
 
+    [Header("Cluster Settings")]
+    private int clusterCount;
+    [SerializeField] private float clusterSpread = 40f;   // sudut total sebaran (derajat)
+    [SerializeField] private float clusterLifeTime = 1f;  // umur pecahan (lebih singkat dari peluru utama)
+
     private Rigidbody2D rb;
     private TrailRenderer trail;
+
+    private bool canCluster;
+    private float clusterMultiplier = 0.5f;
+    private GameObject clusterPrefab;
+    private bool isClusterChild;
+    private bool hasHit;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         trail = GetComponent<TrailRenderer>();
 
-        // Menggunakan linearVelocity untuk Unity versi terbaru / 2D Physics
         rb.linearVelocity = transform.up * speed;
 
-        Destroy(gameObject, lifeTime);
+        Destroy(gameObject, isClusterChild ? clusterLifeTime : lifeTime);
     }
 
     // --- FUNCTION DIPANGGIL DARI TURRETCONTROLLER ---
@@ -31,12 +41,22 @@ public class Bullet : MonoBehaviour
         damage = Mathf.RoundToInt(newDamage);
     }
 
+    public void SetCluster(bool enabled, float multiplier, GameObject prefab, int count)
+    {
+        canCluster = enabled;
+        clusterMultiplier = multiplier;
+        clusterPrefab = prefab;
+        clusterCount = count;
+    }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // Cek jika menabrak musuh (pastikan GameObject musuh diberi Tag "Enemy")
+        if (hasHit) return;
+
         if (collision.CompareTag("Enemy"))
         {
-            // Panggil fungsi TakeDamage di script musuh
+            hasHit = true;
+
             Health enemy = collision.GetComponent<Health>();
             if (enemy != null)
             {
@@ -49,23 +69,53 @@ public class Bullet : MonoBehaviour
                 movement.ApplyKnockback(transform.up, knockbackForce);
             }
 
-            if(hitVfxPrefab != null)
+            if (hitVfxPrefab != null)
             {
-                // Buat efek visual saat peluru menabrak musuh
                 Instantiate(hitVfxPrefab, transform.position, Quaternion.identity);
+            }
+
+            if (canCluster && !isClusterChild && clusterPrefab != null)
+            {
+                SpawnCluster(collision);
             }
 
             DestroyBullet();
         }
     }
 
+    private void SpawnCluster(Collider2D hitEnemy)
+    {
+        int childDamage = Mathf.Max(1, Mathf.RoundToInt(damage * clusterMultiplier));
+        float spread = clusterSpread + (clusterCount - 3) * 10f;
+
+        for (int i = 0; i < clusterCount; i++)
+        {
+            float t = clusterCount > 1 ? (float)i / (clusterCount - 1) : 0.5f;
+            float angle = Mathf.Lerp(-clusterSpread * 0.5f, clusterSpread * 0.5f, t);
+
+            Quaternion rot = transform.rotation * Quaternion.Euler(0f, 0f, angle);
+            GameObject child = Instantiate(clusterPrefab, transform.position, rot);
+
+            Bullet b = child.GetComponent<Bullet>();
+            if (b != null)
+            {
+                b.isClusterChild = true;   // pecahan tidak boleh pecah lagi
+                b.canCluster = false;
+                b.SetDamage(childDamage);
+            }
+
+            // Pecahan tidak langsung mengenai musuh yang sama
+            Collider2D childCol = child.GetComponent<Collider2D>();
+            if (childCol != null && hitEnemy != null)
+                Physics2D.IgnoreCollision(childCol, hitEnemy);
+        }
+    }
+
     private void OnDestroy()
     {
-        // Jika peluru hancur karena waktu (lifetime habis), lepaskan trail-nya
         DetachTrail();
     }
 
-    // Fungsi khusus untuk menghancurkan peluru tanpa memutus jejak trail secara mendadak
     private void DestroyBullet()
     {
         DetachTrail();
@@ -76,11 +126,8 @@ public class Bullet : MonoBehaviour
     {
         if (trail != null)
         {
-            // Lepas trail dari peluru agar bisa memudar dengan mulus
             trail.transform.parent = null;
             trail.emitting = false;
-
-            // Hancurkan objek trail secara otomatis setelah waktu Trail habis
             Destroy(trail.gameObject, trail.time);
         }
     }
